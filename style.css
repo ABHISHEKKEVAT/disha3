@@ -1,0 +1,218 @@
+/* ROOT COLORS & VARIABLES */
+:root{
+  --bg:#0f172a;
+  --panel:#0b1220;
+  --muted:#94a3b8;
+  --text:#e5e7eb;
+  --accent:#f472b6;
+  --accent-2:#a78bfa;
+  --heart:#fb7185;
+  --border:#233049;
+
+  --speed-1: 45s;
+  --speed-2: 60s;
+  --speed-3: 75s;
+
+  --row-h: 140px;
+  --row-gap: 16px;
+}
+
+*{box-sizing:border-box}
+body{
+  margin:0;
+  color:var(--text);
+  background: radial-gradient(120% 140% at 0% 0%, #0b1020, #0f172a 55%, #0a0f1f 100%);
+  font-family: system-ui, sans-serif;
+  overflow-x:hidden;
+}
+
+/* HEARTS */
+.hearts{ position:fixed; inset:0; pointer-events:none; }
+.heart{
+  position:absolute;
+  color:var(--heart);
+  opacity:.15;
+  animation: floatUp linear infinite;
+}
+@keyframes floatUp{
+  from{ transform:translateY(110vh); }
+  to{ transform:translateY(-10vh); }
+}
+
+/* MARQUEES */
+.marquees{
+  position:fixed; inset:0;
+  display:grid;
+  pointer-events:none;
+  align-content:end;
+  gap:var(--row-gap);
+  padding-bottom:10vh;
+  z-index: 1;
+}
+.marquee-row {
+  position: relative;
+  overflow: hidden;
+  mask-image: linear-gradient(90deg, transparent, #000 10%, #000 90%, transparent);
+}
+/* Track that scrolls */
+.marquee-track {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  gap: 14px;
+  will-change: transform;
+  animation: slide-left var(--speed-1) linear infinite;
+}
+/* Slide container */
+.marquee-slide {
+  display: flex;
+  gap: 14px;
+  padding-left: 14px;
+}
+
+/* Pause on hover */
+.marquee-row.pause .marquee-track {
+  animation-play-state: paused;
+}
+
+@keyframes slide-left{
+  from{ transform:translateX(0); }
+  to{ transform:translateX(-50%); }
+}
+.speed-1 .marquee-track{ animation-duration:var(--speed-1); }
+.speed-2 .marquee-track{ animation-duration:var(--speed-2); }
+.speed-3 .marquee-track{ animation-duration:var(--speed-3); }
+
+/* POLAROID */
+.polaroid {
+  background: #fff;
+  padding: 8px 8px 18px;
+  border-radius: 10px;
+  box-shadow: 0 10px 30px rgba(0,0,0,.35);
+  transform: rotate(var(--tilt));
+  transition: .2s ease;
+  pointer-events: auto;
+}
+
+.polaroid img {
+  height: calc(var(--row-h) - 40px);
+  border-radius: 6px;
+  object-fit: cover;
+}
+
+.polaroid .cap {
+  text-align: center;
+  font-size: 12px;
+  color: #0f172a;
+  opacity: .8;
+}
+/* HEADER */
+header{
+  position:relative;
+  z-index:2;
+  text-align:center;
+  padding:32px 18px 18px;
+}
+.badge{
+  display:inline-block;
+  padding:6px 10px;
+  border-radius:999px;
+  border:1px solid #2b3751;
+  background:rgba(167,139,250,.15);
+}
+h1{
+  margin:14px 0 8px;
+  font-size:clamp(28px,4vw,40px);
+  background:linear-gradient(90deg, var(--accent), var(--accent-2));
+  -webkit-background-clip:text;
+  color:transparent;
+}
+.subtitle{ color:var(--muted); }
+
+/* BUTTONS */
+button{
+  border:1px solid var(--border);
+  background:#0b1220;
+  padding:10px 14px;
+  border-radius:12px;
+  color:var(--text);
+  cursor:pointer;
+}
+.btn-accent{
+  border-color:#7c3aed;
+  background:rgba(124,58,237,.25);
+}
+
+/* GALLERY */
+main{
+  position:relative;
+  z-index:2;
+  max-width:1100px;
+  margin:auto;
+  padding:6px 18px 60px;
+}
+.grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fill, minmax(180px,1fr));
+  gap:14px;
+}
+.card{
+  background:#0b1220;
+  border:1px solid var(--border);
+  border-radius:14px;
+  overflow:hidden;
+}
+.thumb-wrap{ aspect-ratio:1/1; }
+.thumb{ width:100%; height:100%; object-fit:cover; }
+figcaption{
+  font-size:12px;
+  color:var(--muted);
+  padding:10px;
+}
+
+/* LIGHTBOX */
+.lightbox{
+  position:fixed; inset:0;
+  background:rgba(3,6,23,.85);
+  display:none;
+  place-items:center;
+}
+.lightbox.open{ display:grid; }
+.lb-img{
+  max-width:96vw;
+  max-height:86vh;
+  border-radius:10px;
+}
+.lb-close{
+  position:absolute;
+  top:14px; right:14px;
+  padding:8px 10px;
+  background:#0b1220;
+  border:1px solid #334155;
+}
+
+/* RESPONSIVE */
+@media (max-width:480px){
+  :root{
+    --row-h:110px;
+    --row-gap:10px;
+  }
+  .grid{
+    grid-template-columns:repeat(auto-fill, minmax(140px,1fr));
+    gap:10px;
+  }
+  h1{ font-size:24px; }
+  .subtitle{ font-size:14px; }
+  button{ padding:8px 12px; font-size:14px; }
+  .lb-img{ max-height:70vh; }
+}
+/* Mobile adjustments */
+@media (max-width: 480px) {
+  :root {
+    --row-h: 110px;
+    --row-gap: 10px;
+  }
+  .polaroid img {
+    height: calc(var(--row-h) - 36px);
+  }
+}

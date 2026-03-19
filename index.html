@@ -3,208 +3,35 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>For <DISHA> 💖</title>
+  <title>For DISHA 💖</title>
   <meta name="description" content="A little gallery of our favorite memories.">
-  <style>
-    :root{
-      --bg:#0f172a;         /* deep slate */
-      --panel:#0b1220;      /* card bg */
-      --muted:#94a3b8;      /* slate-400 */
-      --text:#e5e7eb;       /* gray-200 */
-      --accent:#f472b6;     /* pink-400 */
-      --accent-2:#a78bfa;   /* violet-400 */
-      --heart:#fb7185;      /* rose-400 */
-      --border:#233049;
-
-      /* marquee speeds (seconds for a full loop) */
-      --speed-1: 45s;
-      --speed-2: 60s;
-      --speed-3: 75s;
-
-      /* row visuals */
-      --row-h: 140px;   /* height of each sliding polaroid row */
-      --row-gap: 16px;  /* gap between rows */
-    }
-
-    *{box-sizing:border-box}
-    html,body{height:100%}
-    body{
-      margin:0; color:var(--text);
-      background: radial-gradient(120% 140% at 0% 0%, #0b1020, #0f172a 55%, #0a0f1f 100%);
-      font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, 'Helvetica Neue', Arial;
-      overflow-x: hidden;
-    }
-
-    /* Floating hearts background */
-    .hearts { position: fixed; inset: 0; overflow: hidden; pointer-events: none; z-index: 0; }
-    .heart {
-      position: absolute; color: var(--heart); opacity: .15; font-size: 12px;
-      animation: floatUp linear infinite;
-      text-shadow: 0 0 10px rgba(251,113,133,.35);
-    }
-    @keyframes floatUp {
-      from { transform: translateY(110vh) translateX(0) rotate(0deg); }
-      to   { transform: translateY(-10vh) translateX(-30px) rotate(360deg); }
-    }
-
-    /* Right→left marquee rows layer */
-    .marquees {
-      position: fixed; inset: 0; z-index: 1;
-      display: grid; pointer-events: none;     /* rows don't capture events; cards inside do */
-      grid-template-rows: repeat(3, var(--row-h));
-      gap: var(--row-gap);
-      align-content: end;                       /* rows near bottom */
-      padding: 0 0 10vh 0;                      /* lift rows from absolute bottom */
-    }
-    .marquee-row {
-      position: relative;
-      overflow: hidden;
-      /* fade edges (Safari needs -webkit-) */
-      mask-image: linear-gradient(90deg, transparent 0%, #000 10%, #000 90%, transparent 100%);
-      -webkit-mask-image: linear-gradient(90deg, transparent 0%, #000 10%, #000 90%, transparent 100%);
-    }
-    .marquee-track {
-      position: absolute; inset: 0;
-      display: flex; gap: 14px; align-items: center;
-      will-change: transform;
-      /* Two identical slides inside make this 200% width; animation moves by -50% for a seamless loop */
-      animation: slide-left var(--speed-1) linear infinite;
-    }
-    .marquee-slide {
-      display: flex; gap: 14px; align-items: center; padding-left: 14px;
-    }
-    /* Pause row when hovering cards */
-    .marquee-row.pause .marquee-track { animation-play-state: paused; }
-
-    /* Polaroid card (used in marquee + stream + gallery if needed) */
-    .polaroid {
-      pointer-events: auto; /* allow hover/click even though container is none */
-      background: #fff; border-radius: 10px; padding: 8px 8px 18px 8px;
-      box-shadow: 0 10px 30px rgba(0,0,0,.35);
-      transform: rotate(var(--tilt, 0deg));
-      transition: transform .2s ease, box-shadow .2s ease;
-      user-select: none;
-    }
-    .polaroid:hover {
-      transform: rotate(var(--tilt, 0deg)) translateY(-2px) scale(1.02);
-      box-shadow: 0 14px 40px rgba(0,0,0,.45);
-    }
-    .polaroid img {
-      display:block; width: auto; height: calc(var(--row-h) - 40px);
-      aspect-ratio: 4 / 3; object-fit: cover; border-radius: 6px;
-    }
-    .polaroid .cap {
-      margin-top: 6px; text-align: center; font-size: 12px; color: #0f172a;
-      max-width: calc((var(--row-h) - 40px) * 4 / 3);
-      white-space: nowrap; overflow: hidden; text-overflow: ellipsis; opacity: .8;
-    }
-
-    /* Continuous slide right→left; the track holds two identical slides (200% width) */
-    @keyframes slide-left {
-      from { transform: translateX(0); }
-      to   { transform: translateX(-50%); }
-    }
-    /* Different speeds per row */
-    .speed-1 .marquee-track { animation-duration: var(--speed-1); }
-    .speed-2 .marquee-track { animation-duration: var(--speed-2); }
-    .speed-3 .marquee-track { animation-duration: var(--speed-3); }
-
-    @media (prefers-reduced-motion: reduce) {
-      .marquee-track { animation: none; }
-    }
-
-    /* Header / hero */
-    header{
-      position: relative; z-index: 2;
-      max-width: 980px; margin: 0 auto; padding: 32px 18px 18px;
-      text-align: center;
-    }
-    .badge{
-      display:inline-block; padding:6px 10px; border-radius:999px; border:1px solid #2b3751;
-      color:#c7d2fe; background: linear-gradient(180deg, rgba(167,139,250,.15), rgba(11,18,32,.6));
-      font-size: 12px; letter-spacing:.2px;
-    }
-    h1{
-      margin:14px 0 8px; font-size: clamp(28px, 4vw, 40px);
-      background: linear-gradient(90deg, var(--accent), var(--accent-2)); -webkit-background-clip: text; color: black;background-color: white;
-    }
-    .subtitle{ color:var(--muted); margin: 0 auto 18px; max-width: 680px; line-height: 1.5; }
-
-    .controls{
-      display:flex; gap:10px; justify-content:center; flex-wrap:wrap; margin-top:10px;
-    }
-    button, .btn {
-      appearance:none; border:1px solid var(--border); color:var(--text);
-      background: linear-gradient(180deg, #101827, #0b1220); padding:10px 14px; border-radius: 12px;
-      cursor:pointer; font-weight:600; letter-spacing:.2px; transition:.2s ease;
-      box-shadow: 0 6px 20px rgba(2,8,23,.6), inset 0 0 0 9999px rgba(255,255,255,.02);
-    }
-    button:hover, .btn:hover { transform: translateY(-1px); border-color:#334155; }
-    .btn-accent { border-color:#7c3aed; color:#e9d5ff; background: linear-gradient(180deg, rgba(124,58,237,.25), #0b1220); }
-
-    /* Main gallery grid */
-    main{
-      position: relative; z-index: 2;
-      max-width: 1100px; margin: 0 auto; padding: 6px 18px 60px;
-    }
-    .grid{
-      display:grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: 14px;
-    }
-    .card{
-      background: linear-gradient(180deg, #0b1120, #0b1220);
-      border:1px solid var(--border); border-radius: 14px; overflow: hidden;
-      box-shadow: 0 6px 24px rgba(2,8,23,.5);
-      transition: transform .15s ease;
-    }
-    .card:hover{ transform: translateY(-2px); }
-    .thumb-wrap { aspect-ratio: 1 / 1; background:#091024; display:grid; place-items:center; }
-    img.thumb { width:100%; height:100%; object-fit:cover; display:block; }
-    figcaption{
-      font-size:12px; color:var(--muted); padding:10px; border-top:1px solid #1f2937;
-      background: linear-gradient(180deg, #0b1220, #0a0f1f);
-      white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
-    }
-
-    .footer-note{ color:var(--muted); text-align:center; margin-top:18px; font-size:12px; }
-    a{ color:#7dd3fc; text-decoration:none; } a:hover{text-decoration:underline}
-
-    /* Lightbox */
-    .lightbox{
-      position: fixed; inset:0; display:none; place-items:center; z-index: 10;
-      background: rgba(3, 6, 23, .85); backdrop-filter: blur(2px);
-    }
-    .lightbox.open{ display:grid; }
-    .lb-img{ max-width: min(96vw, 1200px); max-height: 86vh; border-radius: 10px; border:1px solid #2b3751; box-shadow: 0 10px 60px rgba(0,0,0,.5); }
-    .lb-meta{ color:#cbd5e1; margin-top:10px; text-align:center; font-size:13px; }
-    .lb-close{
-      position:absolute; top:14px; right:14px; font-size:14px;
-      background:#0b1220; border:1px solid #334155; color:#e2e8f0; border-radius:10px; padding:8px 10px; cursor:pointer;
-    }
-  </style>
+  <link rel="stylesheet" href="style.css">
 </head>
+
 <body>
   <!-- floating hearts -->
   <div class="hearts" aria-hidden="true"></div>
 
-  <!-- right→left marquee rows (built by JS) -->
+  <!-- marquee rows -->
   <div class="marquees" id="marquees" aria-hidden="false"></div>
 
   <header>
-    <span class="badge">For <strong><HER_NAME></strong> 💗</span>
+    <span class="badge">For <strong>DISHA</strong> 💗</span>
     <h1>HAPPY BIRTHDAY MY GIRL</h1>
-    <p class="subtitle"><I LOVE YOU></p>
+    <p class="subtitle">I LOVE YOU</p>
+
     <div class="controls">
-      <button id="playMusic" class="btn btn-accent">▶️ ABHI</button>
+      <button id="playMusic" class="btn btn-accent">▶️ Play our song</button>
     </div>
+
     <audio id="song" preload="metadata">
-      <!-- Optional: set your song source, e.g.: -->
-      <source src="images/our.mp3" type="audio/mpeg" /> 
+      <source src="images/our.mp3" type="audio/mpeg" />
     </audio>
   </header>
 
   <main>
     <section class="grid" id="gallery" aria-live="polite" aria-busy="false"></section>
-    <p class="footer-note">Made with love by <YOUR_NAME> • All photos are ours 💞</p>
+    <p class="footer-note">Made with love by ABHISHEK • All photos are ours 💞</p>
   </main>
 
   <!-- Lightbox -->
@@ -216,204 +43,6 @@
     </div>
   </div>
 
-  <script>
-    /* ========= CONFIG: add your images here =========
-       1) Create an "images" folder next to this file.
-       2) Put your photos into "images/".
-       3) List them below with optional captions.
-    */
-    const IMAGES = [
-       { file: "01.JPG", caption: "DISHA" },
-       { file: "02.JPG", caption: "DISHA" },
-       { file: "03.JPG", caption: "DISHA" },
-       { file: "04.JPG", caption: "DISHA" },
-       { file: "05.JPG", caption: "DISHA" },
-        { file: "06.JPG", caption: "DISHA" },
-       { file: "07.JPG", caption: "DISHA" },
-       { file: "08.JPG", caption: "DISHA" },
-     { file: "09.JPG", caption: "DISHA" },
-     { file: "10.jpg", caption: "DISHA" },
-     { file: "11.jpg", caption: "DISHA" },
-     { file: "12.jpg", caption: "DISHA" },
-     { file: "13.jpg", caption: "DISHA" },
-     { file: "14.jpg", caption: "DISHA" },
-     { file: "15.jpg", caption: "DISHA" },
-     { file: "16.jpg", caption: "DISHA" },
-     { file: "17.jpg", caption: "DISHA" },
-     { file: "18.jpg", caption: "DISHA" },
-     { file: "19.jpg", caption: "DISHA" },
-     { file: "20.jpg", caption: "DISHA" },
-     { file: "21.jpg", caption: "DISHA" },
-     { file: "22.jpg", caption: "DISHA" },
-     { file: "23.jpg", caption: "DISHA" },
-     { file: "24.jpg", caption: "DISHA" },
-     { file: "25.jpg", caption: "DISHA" },
-    ];
-    const IMAGE_BASE = "images/";
-
-    /* ========= Hearts background ========= */
-    (function spawnHearts(){
-      const container = document.querySelector('.hearts');
-      const count = 30; // gentle
-      for (let i=0; i<count; i++){
-        const s = document.createElement('span');
-        s.className = 'heart';
-        s.textContent = '❤';
-        const left = Math.random()*100;
-        const delay = Math.random()*10;
-        const dur = 10 + Math.random()*14;
-        const size = 10 + Math.random()*22;
-        s.style.left = left + 'vw';
-        s.style.animationDuration = dur + 's';
-        s.style.animationDelay = (-delay) + 's';
-        s.style.fontSize = size + 'px';
-        container.appendChild(s);
-      }
-    })();
-
-    /* ========= Gallery (grid) ========= */
-    const gallery = document.getElementById('gallery');
-    function renderGallery(){
-      gallery.setAttribute('aria-busy','true');
-      gallery.innerHTML = '';
-      if (!IMAGES.length){
-        const empty = document.createElement('div');
-        empty.style.gridColumn = '1/-1';
-        empty.style.textAlign = 'center';
-        empty.style.color = '#94a3b8';
-        empty.style.padding = '24px 0 8px';
-        empty.textContent = 'Add your photos to the IMAGES list in the code and upload them to the images/ folder 🥰';
-        gallery.appendChild(empty);
-        gallery.setAttribute('aria-busy','false');
-        return;
-      }
-
-      for (const item of IMAGES){
-        const fig = document.createElement('figure');
-        fig.className = 'card';
-
-        const wrap = document.createElement('div');
-        wrap.className = 'thumb-wrap';
-        const img = document.createElement('img');
-        img.className = 'thumb';
-        img.loading = 'lazy';
-        img.src = IMAGE_BASE + item.file;
-        img.alt = item.caption || 'Our photo';
-        img.decoding = 'async';
-        wrap.appendChild(img);
-
-        const cap = document.createElement('figcaption');
-        cap.textContent = item.caption || item.file;
-
-        fig.appendChild(wrap);
-        fig.appendChild(cap);
-
-        // open lightbox on click
-        fig.addEventListener('click', () => openLightbox(item));
-
-        gallery.appendChild(fig);
-      }
-      gallery.setAttribute('aria-busy','false');
-    }
-
-    /* ========= Lightbox ========= */
-    const lb = document.getElementById('lightbox');
-    const lbImg = document.getElementById('lbImg');
-    const lbMeta = document.getElementById('lbMeta');
-    const lbClose = document.getElementById('lbClose');
-
-    function openLightbox(item){
-      lbImg.src = IMAGE_BASE + item.file;
-      lbImg.alt = item.caption || 'Our photo';
-      lbMeta.textContent = item.caption || '';
-      lb.classList.add('open');
-    }
-    function closeLightbox(){ lb.classList.remove('open'); lbImg.src=''; }
-    lb.addEventListener('click', (e)=> { if (e.target === lb) closeLightbox(); });
-    lbClose.addEventListener('click', closeLightbox);
-    window.addEventListener('keydown', (e)=> { if (e.key === 'Escape' && lb.classList.contains('open')) closeLightbox(); });
-
-    /* ========= Music control ========= */
-    const song = document.getElementById('song');
-    const playBtn = document.getElementById('playMusic');
-    playBtn.addEventListener('click', async () => {
-      try{
-        if (song.paused){ await song.play(); playBtn.textContent = '⏸️ Pause'; }
-        else { song.pause(); playBtn.textContent = '▶️ Play our song'; }
-      }catch(e){ alert('Tap again to play (autoplay is blocked on some devices).'); }
-    });
-
-    /* ========= Personalize text (defaults if you leave placeholders) ========= */
-    document.title = document.title.replace('<HER_NAME>', 'Her Name');
-    document.querySelector('.badge').innerHTML = document.querySelector('.badge').innerHTML.replace('<HER_NAME>', 'Her Name');
-    document.querySelector('.subtitle').textContent = document.querySelector('.subtitle').textContent.replace('<YOUR_MESSAGE_TO_HER>', 'I made this to keep our favorite moments in one place 💞');
-    document.querySelector('.footer-note').textContent = document.querySelector('.footer-note').textContent.replace('<YOUR_NAME>', 'Your Name');
-
-    /* ========= Build marquee rows (right→left) ========= */
-    (function buildMarquees(){
-      const layer = document.getElementById('marquees');
-      if (!layer || IMAGES.length === 0) return;
-
-      // Decide rows: 2 on small screens, 3 on larger
-      const rows = window.matchMedia('(max-width: 480px)').matches ? 2 : 3;
-      layer.style.gridTemplateRows = `repeat(${rows}, var(--row-h))`;
-
-      for (let r = 0; r < rows; r++){
-        const row = document.createElement('div');
-        row.className = 'marquee-row speed-' + ((r % 3) + 1); // alternate speeds
-
-        const track = document.createElement('div');
-        track.className = 'marquee-track';
-
-        // Build one slide with a subset of images (staggered selection)
-        const slide1 = document.createElement('div');
-        slide1.className = 'marquee-slide';
-
-        const subset = [];
-        for (let i = r; i < IMAGES.length; i += rows) subset.push(IMAGES[i]);
-        // Ensure density; if few images, duplicate until ~6+
-        while (subset.length < 6 && IMAGES.length) subset.push(...IMAGES);
-
-        // Helper to create a polaroid card
-        function makeCard(item){
-          const card = document.createElement('div');
-          card.className = 'polaroid';
-          card.style.setProperty('--tilt', (Math.random()*6 - 3).toFixed(1) + 'deg');
-
-          const img = document.createElement('img');
-          img.src = IMAGE_BASE + item.file;
-          img.alt = item.caption || 'Our photo';
-          img.loading = 'lazy';
-
-          const cap = document.createElement('div');
-          cap.className = 'cap';
-          cap.textContent = item.caption || '';
-
-          card.appendChild(img);
-          card.appendChild(cap);
-
-          // Click -> open lightbox
-          card.addEventListener('click', (e) => { e.stopPropagation(); openLightbox(item); });
-
-          // Pause row when hovering a card
-          card.addEventListener('mouseenter', () => row.classList.add('pause'));
-          card.addEventListener('mouseleave', () => row.classList.remove('pause'));
-
-          return card;
-        }
-
-        for (const item of subset) slide1.appendChild(makeCard(item));
-        const slide2 = slide1.cloneNode(true); // duplicate for seamless loop
-
-        track.appendChild(slide1);
-        track.appendChild(slide2);
-        row.appendChild(track);
-        layer.appendChild(row);
-      }
-    })();
-
-    // Render main grid
-    renderGallery();
-  </script>
+  <script src="script.js"></script>
 </body>
 </html>
